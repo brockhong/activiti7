@@ -1,0 +1,5 @@
+#haha
+project:
+  manifest:
+    file:
+      path: classpath:/default-project.json
