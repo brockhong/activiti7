@@ -19,6 +19,12 @@
 * HuiqianDaiqian.bpmn 节点多实例实现代签 用户组 模拟单实例
 * HuiqianDaiqian2.bpmn 节点多实例实现代签 用户组 模拟多实例
 * HuiqianDaiqian3.bpmn 节点多实例实现代签 同一个流程定义，模拟单实例和多实例两种情况
+
+
+*Bohui4huiqianz.bpmn 驳回会签并行  BohuihuiqianTest
+*Bohui4huiqianh.bpmn  驳回会签节点  顺序会签
+*ExclusiveGatewaybohui.bpmn  驳回网关  mainifest这个问题 流程定义 流程部署时 设置版本字段 如果没有就回报错
+
 # 问题点
 * activiti7的自动识别processes下的bpmn文件，但是只会识别第一次，如果再次新建一个bpmn文件，再执行代码数据库里不会增加记录
 * =》待确认 =》activiti7读的是target/classes下的processes里的bpmn文件，需要重新打包才会读取最新的bpmn文件
@@ -29,6 +35,9 @@
 比如：现在工程版本是1，现在新加了一个流程图，我把工程版本改为2，这时所有流程图的版本都会被改成2
 而如果不改工程版本的话，新加的流程图是不会刷到数据库中的。
 其它问题可以参照我的博客：http://zpycloud.com/archives/category/%e5%b7%a5%e4%bd%9c%e6%b5%81%e5%bc%95%e6%93%8e/
+
+* MyProcessRuntimeImpl.java 修复分页
+
 # 版本问题
 ## 7.1.0.M6
 * 新增bpmn流程图时新增的这个不会自动部署
