@@ -5,9 +5,14 @@ import com.alibaba.druid.pool.DruidDataSource;
 //import com.zp.activitispringboot.cmd.HisActInstanceMapper;
 import com.zp.activitispringboot.cmd.HisActInstanceMapper;
 import org.activiti.engine.ProcessEngineConfiguration;
+import org.activiti.engine.impl.bpmn.parser.factory.DefaultActivityBehaviorFactory;
+import org.activiti.engine.impl.history.HistoryLevel;
+import org.activiti.spring.SpringAsyncExecutor;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.AbstractProcessEngineAutoConfiguration;
 
+import org.activiti.spring.boot.ActivitiProperties;
+import org.activiti.spring.boot.DefaultActivityBehaviorFactoryMappingConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -38,20 +43,41 @@ public class ActivitiDatadourceConfig extends AbstractProcessEngineAutoConfigura
     }
 
     @Bean
-    public SpringProcessEngineConfiguration springProcessEngineConfiguration() {
-        SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
-        configuration.setDataSource(activitiDataSource());
-        configuration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+    public SpringProcessEngineConfiguration springProcessEngineConfiguration(SpringAsyncExecutor springAsyncExecutor,
+                                                                             ActivitiProperties activitiProperties,
+                                                                             DefaultActivityBehaviorFactoryMappingConfigurer processEngineConfigurationConfigurer) {
+        SpringProcessEngineConfiguration conf = new SpringProcessEngineConfiguration();
+        conf.setDataSource(activitiDataSource());
+        //properties 复制过来
+        conf.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+        conf.setTransactionManager(transactionManager());
+        conf.setHistoryLevel(HistoryLevel.AUDIT);
+        //设置不自动部署
+        conf.setDeploymentMode("never-fail");
 
-        configuration.setTransactionManager(transactionManager());
-
-        configuration.setDeploymentMode("never-fail");
+        //properties 复制过来 end
+        //下面不知道哪个起了作用
+        if (springAsyncExecutor != null) {
+            conf.setAsyncExecutor(springAsyncExecutor);
+        }
+        //conf.setDeploymentName(activitiProperties.getDeploymentName());
+        conf.setDatabaseSchema(activitiProperties.getDatabaseSchema());
+        conf.setDatabaseSchemaUpdate(activitiProperties.getDatabaseSchemaUpdate());
+        conf.setDbHistoryUsed(activitiProperties.isDbHistoryUsed());
+        conf.setAsyncExecutorActivate(activitiProperties.isAsyncExecutorActivate());
 
         //自定义处理语句接口
         Set<Class<?>> customMybatisXMLMappers = new HashSet<Class<?>>();
         customMybatisXMLMappers.add(HisActInstanceMapper.class);
-        configuration.setCustomMybatisMappers(customMybatisXMLMappers);
+        conf.setCustomMybatisMappers(customMybatisXMLMappers);
 
-        return configuration;
+
+        conf.setActivityBehaviorFactory(new DefaultActivityBehaviorFactory());
+
+        if (processEngineConfigurationConfigurer != null) {
+            processEngineConfigurationConfigurer.configure(conf);
+        }
+
+        return conf;
     }
 }
