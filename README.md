@@ -36,12 +36,14 @@
 而如果不改工程版本的话，新加的流程图是不会刷到数据库中的。
 其它问题可以参照我的博客：http://zpycloud.com/archives/category/%e5%b7%a5%e4%bd%9c%e6%b5%81%e5%bc%95%e6%93%8e/
 
-*  <font color=red>MyProcessRuntimeImpl.java 修复分页</font>
+```diff
 
-* <font color=red>JumpTaskTest.java  修复跳转</font>
++ green color * MyProcessRuntimeImpl.java 修复分页
 
-* 切换数据源
+- red color * <font color=red>JumpTaskTest.java  修复跳转
 
+- red color * 切换数据源
+```
 # 版本问题
 ## 7.1.0.M6
 * 新增bpmn流程图时新增的这个不会自动部署
