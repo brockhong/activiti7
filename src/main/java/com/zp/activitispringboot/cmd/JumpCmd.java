@@ -49,6 +49,8 @@ public class JumpCmd implements Command<Void> {
         agenda.planContinueProcessInCompensation(executionEntity);
         // 从runtime 表中删除当前任务
         taskEntityManager.delete(taskId);
+        //不是知道对不对 todo 不删除当前数据流程不能走完 目前好像可以
+        commandContext.getVariableInstanceEntityManager().deleteVariableInstanceByTask(taskEntity);
         // 将历史任务表更新, 历史任务标记为完成
         historyManager.recordTaskEnd(taskId, "jump");
         return null;

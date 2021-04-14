@@ -10,6 +10,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -113,9 +114,18 @@ public class ActivitiHistoryController {
             }
 
             //获取流程实例 历史节点(全部)
-            List<HistoricActivityInstance> list = historyService.createHistoricActivityInstanceQuery()
+            List<HistoricActivityInstance> list1 = historyService.createHistoricActivityInstanceQuery()
                     .processInstanceId(instanceId)
                     .list();
+            //去掉delete reason 数据 ，目前跳转没问题，执行有问题
+            List<HistoricActivityInstance> list= new ArrayList<>();
+            for (HistoricActivityInstance h:list1) {
+                if(StringUtils.isBlank(h.getDeleteReason())){
+                    list.add(h);
+                }
+            }
+
+
             //各个历史节点   两两组合 key
             Set<String> keyList = new HashSet<>();
             for (HistoricActivityInstance i : list) {
