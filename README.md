@@ -38,11 +38,11 @@
 
 ```diff
 
-+ green color * MyProcessRuntimeImpl.java 修复分页
++ green color MyProcessRuntimeImpl.java 修复分页
 
-- red color * <font color=red>JumpTaskTest.java  修复跳转
+- red color JumpTaskTest.java  修复跳转
 
-- red color * 切换数据源
+- red color 切换数据源
 ```
 # 版本问题
 ## 7.1.0.M6
