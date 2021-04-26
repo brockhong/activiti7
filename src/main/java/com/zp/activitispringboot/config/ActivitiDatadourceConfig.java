@@ -64,7 +64,8 @@ public class ActivitiDatadourceConfig extends AbstractProcessEngineAutoConfigura
         conf.setDatabaseSchema(activitiProperties.getDatabaseSchema());
         conf.setDatabaseSchemaUpdate(activitiProperties.getDatabaseSchemaUpdate());
         conf.setDbHistoryUsed(activitiProperties.isDbHistoryUsed());
-        conf.setAsyncExecutorActivate(activitiProperties.isAsyncExecutorActivate());
+        //默认查询数据 o.a.e.i.p.e.J.selectJobsToExecute   activitiProperties.isAsyncExecutorActivate()
+        conf.setAsyncExecutorActivate(false);
 
         //自定义处理语句接口
         Set<Class<?>> customMybatisXMLMappers = new HashSet<Class<?>>();
